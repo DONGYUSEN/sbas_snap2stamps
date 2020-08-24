@@ -2,7 +2,7 @@
 
 Python scripts for SBAS pre-processing in SNAP
 
-I try it with S1 dataset, seem working. Please test it. Thx
+The new version be coming soon. 
 
 BTW:
 
