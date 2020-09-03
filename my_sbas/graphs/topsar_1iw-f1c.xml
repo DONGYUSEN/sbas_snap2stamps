@@ -10,7 +10,7 @@
   <node id="Multilook">
     <operator>Multilook</operator>
     <sources>
-      <sourceProduct refid="Read"/>
+      <sourceProduct refid="Subset"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <sourceBands/>
@@ -23,13 +23,13 @@
   <node id="Subset">
     <operator>Subset</operator>
     <sources>
-      <sourceProduct refid="Multilook"/>
+      <sourceProduct refid="Read"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <sourceBands/>
-      <region>0,0,0,0</region>
+      <region>CropSx,CropSy,CropWx,CropWy</region>
       <referenceBand/>
-      <geoRegion>POLYGON</geoRegion>
+      <geoRegion/>
       <subSamplingX>1</subSamplingX>
       <subSamplingY>1</subSamplingY>
       <fullSwath>false</fullSwath>
@@ -40,7 +40,7 @@
   <node id="Write">
     <operator>Write</operator>
     <sources>
-      <sourceProduct refid="Subset"/>
+      <sourceProduct refid="Multilook"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <file>OUTPUT0</file>

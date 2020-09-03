@@ -8,10 +8,25 @@
     </parameters>
   </node>
 
+  <node id="Land-Sea-Mask">
+    <operator>Land-Sea-Mask</operator>
+    <sources>
+      <sourceProduct refid="Read"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <sourceBands/>
+      <landMask>false</landMask>
+      <useSRTM>true</useSRTM>
+      <geometry/>
+      <invertGeometry>false</invertGeometry>
+      <shorelineExtension>0</shorelineExtension>
+    </parameters>
+  </node>
+
   <node id="Interferogram">
     <operator>Interferogram</operator>
     <sources>
-      <sourceProduct refid="Read"/>
+      <sourceProduct refid="Land-Sea-Mask"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <subtractFlatEarthPhase>true</subtractFlatEarthPhase>
@@ -46,6 +61,9 @@
     <Description/>
     <node id="Read">
       <displayPosition x="20.0" y="20.0"/>
+    </node>
+    <node id="Land-Sea-Mask">
+      <displayPosition x="228.0" y="135.0"/>
     </node>
     <node id="Interferogram">
       <displayPosition x="651.0" y="40.0"/>

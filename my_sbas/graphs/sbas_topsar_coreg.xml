@@ -52,10 +52,19 @@
       <overallAzimuthShift>0.0</overallAzimuthShift>
     </parameters>
   </node>
+    <node id="TOPSAR-Deburst">
+    <operator>TOPSAR-Deburst</operator>
+    <sources>
+      <sourceProduct refid="Back-Geocoding"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <selectedPolarisations>VV</selectedPolarisations>
+    </parameters>
+  </node>
   <node id="Write">
     <operator>Write</operator>
     <sources>
-      <sourceProduct refid="Enhanced-Spectral-Diversity"/>
+      <sourceProduct refid="TOPSAR-Deburst"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <file>iOUTPUT</file>
@@ -75,6 +84,9 @@
     </node>
     <node id="Enhanced-Spectral-Diversity">
       <displayPosition x="323.0" y="162.0"/>
+    </node>
+        <node id="TOPSAR-Deburst">
+      <displayPosition x="478.0" y="40.0"/>
     </node>
     <node id="Write">
       <displayPosition x="551.0" y="162.0"/>
