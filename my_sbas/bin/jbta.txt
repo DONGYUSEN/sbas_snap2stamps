@@ -2,32 +2,32 @@
 ######### CONFIGURATION FILE ######
 ###################################
 # PROJECT DEFINITION
-SOURCEFOLDER=/Volumes/DATA/shanxi/org
-PROJECTFOLDER=/Volumes/DATA/shanxi/psinsar
+SOURCEFOLDER=/Volumes/DATA/jbta/org
+PROJECTFOLDER=/Volumes/DATA/jbta/psinsar
 GRAPHSFOLDER=/Users/ysdong/Software/my_sbas/graphs
 ##################################
 # PROCESSING PARAMETERS
-IW1=IW2
-MASTER=S1A_IW_SLC__1SDV_20191220T104456_20191220T104523_030431_037B99_527B.zip
+IW1=IW1
+MASTER=S1B_IW_SLC__1SDV_20181103T151751_20181103T151819_013442_018DEC_C06F.zip
 ##################################
 #SBAS 
 temp_baseline=30
-##################################
 # AOI AREA , only for splitting master and slave
-LONMIN=108.6
-LATMIN=33.45
-LONMAX=108.7
-LATMAX=33.60
+LONMIN=42.30
+LATMIN=11.47
+LONMAX=42.60
+LATMAX=11.72
+##################################
 #AOI clip area， for data clip， the reference image should be deburst and merged.
-CropSx=1000
-CropSy=1
-CropWx=5000
-CropWy=2800
+CropSx=2000
+CropSy=300
+CropWx=6000
+CropWy=3600
 ##################################
 # Multilook 
-RGLOOK=1
+RGLOOK=3
 AZLOOK=1
-SMOOTH=0
+SMOOTH=1
 ##################################
 # SNAP GPT 
 GPTBIN_PATH=/Applications/snap/bin/gpt

@@ -39,7 +39,7 @@ finishedfile=''
 finishedlist=[]
 error_flag = 0
 coreglist = [[] for i in range(2)] 
-temp_baseline = 45
+temp_baseline = 30
 suppermasterdate = []
 
 
@@ -76,7 +76,7 @@ def interferometry(inlist):
 			return
 
 		graphxml=GRAPH+'/sbas_topsar_coreg.xml' #will be changed in mergering !
-		graph2run=PROJECT+'/graphs/sbas_topsar_coreg2run'  + '_' + masterdate + '_' + slavedate + '_' + IW + '.xml' #will be changed in mergering !
+		graph2run=PROJECT+'/graphs/sbas_topsar_coreg2run.xml' #will be changed in mergering !
 		print ('\n*****' + IW + ' of ' + str(len(IWlist)) +'IWs :'+ masterdate + '_' + slavedate + ' coregistration\n')
 		with open(graphxml, 'r') as file :
 			filedata = file.read()
@@ -145,12 +145,29 @@ def interferometry(inlist):
 			# modify the .dim file:
 			dimfile = tempcoreg+ '/' + masterdate + '_' + slavedate + '_' + IW  + '_' + 'coreg.dim'
 			# print(dimfile)
+			master_source_dim = tempcoreg+ '/' + suppermasterdate + '_' + masterdate + '_' + IW  + '_' + 'coreg.dim'
+			with open(master_source_dim, 'r') as file :
+				for msd_line  in file :
+					if '<BAND_RASTER_WIDTH>' in msd_line :
+						widthline = msd_line
+					if '<BAND_RASTER_HEIGHT>' in msd_line :
+						heightline = msd_line
+						break
+			with open(dimfile, 'r') as file :
+				for msd_line  in file :
+					if '<BAND_RASTER_WIDTH>' in msd_line :
+						widthline2 = msd_line
+					if '<BAND_RASTER_HEIGHT>' in msd_line :
+						heightline2 = msd_line
+						break
 			with open(dimfile, 'r') as file :
 				filedata = file.read()
+			filedata = filedata.replace(widthline2,	widthline)
+			filedata = filedata.replace(heightline2, heightline)
 			filedata = filedata.replace('<DATA_TYPE>int16</DATA_TYPE>',	'<DATA_TYPE>float32</DATA_TYPE>', 2)
 			with open(dimfile, 'w') as file:
 				file.write(filedata)
-			print ('Finish linking data....\n')	
+			print ('Finish copy data....\n')	
 
 			if process.returncode != 0 :
 				error_flag = 1
@@ -221,12 +238,15 @@ if __name__ == "__main__":
 				# print CPU
 			if "Multiproc" in line:
 				Multiproc = int(line.split('=')[1].strip())
-				# print Multiproc				
+				# print Multiproc		
+			if "temp_baseline" in line:
+				temp_baseline = int(line.split('=')[1].strip())						
 	finally:
 		in_file.close()
 polygon='POLYGON (('+LONMIN+' '+LATMIN+','+LONMAX+' '+LATMIN+','+LONMAX+' '+LATMAX+','+LONMIN+' '+LATMAX+','+LONMIN+' '+LATMIN+'))'
 print ('AOI: ', polygon)
 print ('Mulitlook, Ra:Az = ', RGLOOK + ':' + AZLOOK)
+print ('Small baseline time: ',  temp_baseline)
 	#############################################################################
 	### TOPSAR Splitting (Assembling) and Apply Orbit section ####
 	############################################################################
@@ -238,6 +258,7 @@ ifgfolder=PROJECT+'/ifg'
 tempfolder=PROJECT+'/temp'
 tempcoreg=PROJECT+'/tempcoreg'
 finishedfile=tempcoreg+'/finished.txt'
+sbas_addfile = PROJECT + '/sbas_add.txt'
 
 if not os.path.exists(splitslavefolder):
 	os.makedirs(splitslavefolder)
@@ -253,6 +274,8 @@ if not os.path.exists(tempcoreg):
 	os.makedirs(tempcoreg)	
 if not os.path.exists(finishedfile):
 	Path(finishedfile).touch()
+if not os.path.exists(sbas_addfile):
+	Path(sbas_addfile).touch()	
 
 print (bar_message)
 print ('## TOPSAR SBAS coregistration @@ ##')
@@ -308,6 +331,14 @@ for i in range(total_slave-1):
 			coreglist[0].append(slavelist[i][0])
 			coreglist[1].append(slavelist[j][0])
 
+with open(sbas_addfile, 'r') as infile :
+	for line in infile.readlines():
+		files_date1 = line[0:8].strip()
+		files_date2 = line[9:17].strip()
+		coreglist[0].append(files_date1)
+		coreglist[1].append(files_date2)
+		
+
 inputlist = list(range(len(coreglist[0])))
 total_slave = len(coreglist[0])
 print ('\n*****  Totally ' + str(len(coreglist[0])) + ' pairs !!!  ****\n')
@@ -318,7 +349,7 @@ pool = Pool(processes = Multiproc)
 
 # result = pool.map(test, inputlist0)
 result = pool.map(interferometry, inputlist)
-print (result)
+print ('Finished all ')
 
 
 
