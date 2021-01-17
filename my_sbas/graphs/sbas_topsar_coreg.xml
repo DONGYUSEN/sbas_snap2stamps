@@ -55,7 +55,7 @@
     <node id="TOPSAR-Deburst">
     <operator>TOPSAR-Deburst</operator>
     <sources>
-      <sourceProduct refid="Back-Geocoding"/>
+      <sourceProduct refid="Enhanced-Spectral-Diversity"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <selectedPolarisations>VV</selectedPolarisations>
